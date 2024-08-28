@@ -35,9 +35,9 @@ class ButtonComponent extends StatefulWidget {
         onTapFunc: onTap,
         whichBtn: WhichBtn.permissionBtn,
         isEnableBtn: isEnable,
-        width: width,
         textBtn: text,
         textColorBtn: textColor,
+        width: width,
       );
 
   factory ButtonComponent.submitAccident({
@@ -71,18 +71,21 @@ class _ButtonComponentState extends State<ButtonComponent> {
         child: Center(
           child: Container(
             width: widget.width,
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
             decoration: widget.isEnableBtn ? BoxDecoration(
-              color: Colors.green,
+              color: const Color(0xFF2BE060),
               borderRadius: BorderRadius.circular(8.0),
             ) : BoxDecoration(
               color: Colors.grey,
               borderRadius: BorderRadius.circular(8.0),
             ),
-            child: Text(widget.textBtn,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 15.0,
-                fontWeight: FontWeight.bold,
+            child: Center(
+              child: Text(widget.textBtn,
+                style: TextStyle(
+                  color: widget.textColorBtn,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
@@ -92,6 +95,7 @@ class _ButtonComponentState extends State<ButtonComponent> {
         onTap: widget.isEnableBtn ? widget.onTapFunc : null,
         child: Center(
           child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
             width: widget.width,
             decoration: widget.isEnableBtn ? BoxDecoration(
               color: Colors.blue,
@@ -100,11 +104,13 @@ class _ButtonComponentState extends State<ButtonComponent> {
               color: Colors.grey,
               borderRadius: BorderRadius.circular(8.0),
             ),
-            child: Text(widget.textBtn,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 15.0,
-                fontWeight: FontWeight.bold,
+            child: Center(
+              child: Text(widget.textBtn,
+                style: TextStyle(
+                  color: widget.textColorBtn,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),

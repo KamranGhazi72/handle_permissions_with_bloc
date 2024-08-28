@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -40,7 +39,7 @@ class _AccidentLocationScreenState extends State<AccidentLocationScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: FlutterMap(
-                    options: MapOptions(
+                    options: const MapOptions(
                       initialZoom: 15,
                       initialCenter: LatLng(35.757732, 51.412588),
                     ),
@@ -56,16 +55,14 @@ class _AccidentLocationScreenState extends State<AccidentLocationScreen> {
                           Marker(
                             width: 80.0,
                             height: 80.0,
-                            point: LatLng(35.757732, 51.412588),
-                            child: Container(
-                              child: IconButton(
-                                icon: Icon(Icons.location_on),
-                                color: Colors.red,
-                                iconSize: 45.0,
-                                onPressed: () {
-                                  print('yeahaa');
-                                },
-                              ),
+                            point: const LatLng(35.757732, 51.412588),
+                            child: IconButton(
+                              icon: const Icon(Icons.location_on),
+                              color: Colors.red,
+                              iconSize: 45.0,
+                              onPressed: () {
+                                print('yeahaa');
+                              },
                             ),
                           ),
                         ],
@@ -77,71 +74,95 @@ class _AccidentLocationScreenState extends State<AccidentLocationScreen> {
             );
           }
           if (state.locationPermissionStatus is LocationPermissionDenied) {
-            return ButtonComponent.permissionBtn(
-              width: 200.0,
-              isEnable: null,
-              text: "اجازه دسترسی مجدد",
-              onTap: () => BlocProvider.of<AccidentLocationCubit>(context)
-                  .checkLocationPermission(),
+            return PermissionStateUi(
+              textBtn: 'Try and Allow',
+              description: 'Please Allow The Permission To APP Access Accident Location',
+              onTapFunc: () => BlocProvider.of<AccidentLocationCubit>(context).checkLocationPermission(),
             );
           }
           if (state.locationPermissionStatus
               is LocationPermissionDeniedForever) {
-            return ButtonComponent.permissionBtn(
-              width: 200.0,
-              text: "ارجاع به تنظیمات تلفن همراه",
-              onTap: () async => await openAppSettings(),
+            return PermissionStateUi(
+              textBtn: 'Go to Settings',
+              description: 'Your Device Access Location has been Denied Forever, Please Allow APP to Know Accident Location',
+              onTapFunc: () async => await openAppSettings(),
             );
           }
-          if (state.locationPermissionStatus
-              is LocationPermissionInitialState) {
-            return Stack(
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  height: 90.0,
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: IconButton(
-                          onPressed: () => context.pop(),
-                          icon: Icon(Icons.arrow_back_ios_new_rounded),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      "assets/images/location_allowing.svg",
-                      height: 200.0,
-                      width: 300.0,
-                    ),
-                    SizedBox(
-                      height: 100.0,
-                      child: Text(
-                        'برای ثبت اطلاعات موقعیت تصادف٬ باید gps دستگاه خود را فعال کنید',
-                      ),
-                    ),
-                    ButtonComponent.permissionBtn(
-                      width: 200.0,
-                      text: 'فعال سازی موقعیت مکانی',
-                      onTap: () =>
-                          BlocProvider.of<AccidentLocationCubit>(context)
-                              .checkLocationPermission(),
-                    ),
-                  ],
-                ),
-              ],
+          if (state.locationPermissionStatus is LocationState) {
+            return PermissionStateUi(
+              textBtn: 'Active Location',
+              description: 'To Use from Map, GPS on is Required',
+              onTapFunc: () => BlocProvider.of<AccidentLocationCubit>(context).checkLocationPermission(),
             );
           }
           return Container();
         },
       ),
+    );
+  }
+}
+
+class PermissionStateUi extends StatefulWidget {
+  final VoidCallback onTapFunc;
+  final String description;
+  final String textBtn;
+
+  const PermissionStateUi(
+      {super.key,
+      required this.onTapFunc,
+      required this.description,
+      required this.textBtn});
+
+  @override
+  State<PermissionStateUi> createState() => _PermissionStateUiState();
+}
+
+class _PermissionStateUiState extends State<PermissionStateUi> {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        SizedBox(
+          width: double.infinity,
+          height: 90.0,
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: IconButton(
+                  onPressed: () => context.pop(),
+                  icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              "assets/images/location_access.svg",
+              height: 300.0,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: SizedBox(
+                height: 100.0,
+                child: Text(
+                  widget.description,
+                ),
+              ),
+            ),
+            ButtonComponent.permissionBtn(
+              width: 200,
+              textColor: Colors.white,
+              text: widget.textBtn,
+              onTap: widget.onTapFunc,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

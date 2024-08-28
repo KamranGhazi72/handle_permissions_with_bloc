@@ -29,16 +29,20 @@ class _SplashScreenState extends State<SplashScreen> {
         ],
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(
-            child: Text(
-              "Splash",
-              style: TextStyle(fontSize: 30, color: Colors.red),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 20.0),
+              ),
+              onPressed: () => context.pushNamed('/submitAccidentLocation'),
+              child: const Text("Go To Map",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16.0,
+              ),),
             ),
-          ),
-          ElevatedButton(
-            onPressed: () => context.pushNamed('/submitAccidentLocation'),
-            child: Text("Next"),
           ),
         ],
       ),

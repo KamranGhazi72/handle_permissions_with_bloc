@@ -50,8 +50,7 @@ class AccidentLocationCubit extends Cubit<AccidentLocationState> {
       }
     } else {
       emit(
-        state.copyWith(
-            newLocationPermissionStatus: LocationPermissionInitialState()),
+        state.copyWith(newLocationPermissionStatus: LocationState()),
       );
     }
   }

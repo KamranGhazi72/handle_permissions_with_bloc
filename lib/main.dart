@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
       builder: (context, state) {
         return MaterialApp.router(
           debugShowCheckedModeBanner: false,
-          title: 'AniKhesarat',
+          title: 'Permission Handler MINI APP',
           theme: state.isDark
               ? AppTheme(AppColors.darkColors).getTheme()
               : AppTheme(AppColors.mainColors).getTheme(),

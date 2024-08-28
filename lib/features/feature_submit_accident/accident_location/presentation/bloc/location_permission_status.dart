@@ -4,6 +4,8 @@ abstract class LocationPermissionStatus {}
 
 class LocationPermissionInitialState extends LocationPermissionStatus {}
 
+class LocationState extends LocationPermissionStatus {}
+
 class LocationPermissionDeniedForever extends LocationPermissionStatus {}
 
 class LocationPermissionDenied extends LocationPermissionStatus {}
